@@ -10,9 +10,7 @@ import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import { AfterimagePass } from "three/examples/jsm/postprocessing/AfterimagePass";
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
-import { Flock } from "./flock";
 import "./styles.css";
 
 // Makes these prototypes available as "native" jsx-string elements

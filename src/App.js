@@ -258,7 +258,11 @@ export default function App() {
         ? "#2622cf"
         : "#ffdb14",
     color:
-      location === "/" ? "#f679c5" : location === "/knot" ? "white" : "white"
+      location === "/"
+        ? "#f679c5"
+        : location === "/knot"
+        ? "#f679c5"
+        : "#f679c5"
   });
   // Animated shape props
   const transition = useTransition(location, {

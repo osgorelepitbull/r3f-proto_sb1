@@ -236,9 +236,9 @@ export function Flock({ count, mouse }) {
 
   return (
     <>
-      <pointLight ref={light} distance={30} intensity={5} color="#FFCC66">
+      <pointLight ref={light} distance={10} intensity={5} color="#FFCC66">
         <mesh>
-          <sphereBufferGeometry attach="geometry" args={[2.5, 32, 32]} />
+          <sphereBufferGeometry attach="geometry" args={[0.3, 32, 32]} />
           <meshBasicMaterial attach="material" color="#FFCC66" />
         </mesh>
       </pointLight>
