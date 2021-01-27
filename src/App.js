@@ -17,7 +17,7 @@ const material3 = new DistortionMaterial();
 const jumbo = {
   "/": ["SYB1L", "BLABLA"],
   "/knot": ["OcTo COre", "Extra Fight."],
-  "/bomb": ["Galaxy", "favor", "based."]
+  "/video": ["Galaxy", "flavor", "based."]
 };
 
 function Shape({
@@ -65,7 +65,7 @@ function Shape({
 }
 
 function Shapes({ transition }) {
-  const { nodes } = useGLTF("/F16D.gltf");
+  const { nodes } = useGLTF("/F-16D.gltf");
   const textures = useTexture([
     "/ao.jpg",
     "/normal.jpg",
@@ -153,13 +153,8 @@ export default function App() {
   // Animated background color
   const props = useSpring({
     background:
-      location === "/"
-        ? "#270075"
-        : location === "/knot"
-        ? "#270075"
-        : "#ffcc6d",
-    color:
-      location === "/" ? "#ca6dff" : location === "/knot" ? "white" : "white"
+      location === "/" ? "#9d169f" : location === "/knot" ? "#2622cf" : "#ffdb14",
+    color: location === "/" ? "#f679c5" : location === "/knot" ? "white" : "white"
   });
   // Animated shape props
   const transition = useTransition(location, {
