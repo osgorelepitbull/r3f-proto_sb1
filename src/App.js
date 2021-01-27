@@ -1,6 +1,21 @@
 import * as THREE from "three";
-import React, { Suspense, useLayoutEffect, useMemo, useRef } from "react";
-import { Canvas, useThree, useFrame } from "react-three-fiber";
+import React, {
+  Suspense,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useCallback,
+  useEffect
+} from "react";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { AfterimagePass } from "three/examples/jsm/postprocessing/AfterimagePass";
+import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { Flock } from "./flock";
+import "./styles.css";
+import { Canvas, extend, useThree, useFrame } from "react-three-fiber";
 import { Environment } from "@react-three/drei/Environment";
 import { Loader, useTexture, useGLTF, Shadow } from "@react-three/drei";
 import { useTransition, useSpring } from "@react-spring/core";
@@ -19,6 +34,90 @@ const jumbo = {
   "/knot": ["OcTo COre", "Extra Fight."],
   "/video": ["Galaxy", "flavor", "based."]
 };
+
+extend({
+  EffectComposer,
+  ShaderPass,
+  RenderPass,
+  AfterimagePass,
+  UnrealBloomPass
+});
+
+function Effect() {
+  const composer = useRef();
+  const { scene, gl, size, camera } = useThree();
+  const aspect = useMemo(() => new THREE.Vector2(size.width, size.height), [
+    size
+  ]);
+  useEffect(() => void composer.current.setSize(size.width, size.height), [
+    size
+  ]);
+  useFrame(() => composer.current.render(), 1);
+  return (
+    <effectComposer ref={composer} args={[gl]}>
+      <renderPass attachArray="passes" scene={scene} camera={camera} />
+      <unrealBloomPass attachArray="passes" args={[aspect, 1.3, 1, 0]} />
+      <shaderPass
+        attachArray="passes"
+        args={[FXAAShader]}
+        uniforms-resolution-value={[1 / size.width, 1 / size.height]}
+        renderToScreen
+      />
+    </effectComposer>
+  );
+}
+
+/*
+function FlockApp() {
+  const mouse = useRef([0, 0, false]);
+
+  const onMouseMove = useCallback(
+    ({ clientX: x, clientY: y }) =>
+      (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
+    []
+  );
+
+  const handleMouseDown = (event) => {
+    if (event.button !== 2) {
+      mouse.current[2] = true;
+    }
+  };
+
+  const handleMouseUp = (event) => {
+    if (event.button !== 2) {
+      mouse.current[2] = false;
+    }
+  };
+
+  return (
+    <div
+      style={{ width: "100%", height: "100%" }}
+      onMouseMove={onMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      <Canvas camera={{ fov: 75, position: [0, 0, 70] }}>
+        <spotLight
+          intensity={0.15}
+          position={[0, 0, 70]}
+          penumbra={1}
+          color="lightblue"
+        />
+        <mesh>
+          <planeBufferGeometry attach="geometry" args={[10000, 10000]} />
+          <meshPhongMaterial
+            attach="material"
+            color="#272727"
+            depthTest={false}
+          />
+        </mesh>
+        <Flock mouse={mouse} count={600} />
+        <Effect />
+      </Canvas>
+    </div>
+  );
+}
+*/
 
 function Shape({
   geometry,
@@ -183,8 +282,32 @@ export default function App() {
     },
     config: () => (n) => n === "opacity" && { friction: 60 }
   });
+
+  /* Mouse properties */
+  const mouse = useRef([0, 0, false]);
+  const onMouseMove = useCallback(
+    ({ clientX: x, clientY: y }) =>
+      (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
+    []
+  );
+  const handleMouseDown = (event) => {
+    if (event.button !== 2) {
+      mouse.current[2] = true;
+    }
+  };
+  const handleMouseUp = (event) => {
+    if (event.button !== 2) {
+      mouse.current[2] = false;
+    }
+  };
+
   return (
-    <>
+    <div
+      id="main-container"
+      onMouseMove={onMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
       <Container style={{ ...props }}>
         <Jumbo>
           {transition((style, location) => (
@@ -209,9 +332,11 @@ export default function App() {
           <Shapes transition={transition} />
           <Environment files="photo_studio_01_1k.hdr" />
         </Suspense>
+        <Flock mouse={mouse} count={600} />
+        <Effect />
       </Canvas>
       <Nav style={{ color: props.color }} />
       <Loader />
-    </>
+    </div>
   );
 }
