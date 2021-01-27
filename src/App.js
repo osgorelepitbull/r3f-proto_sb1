@@ -65,7 +65,7 @@ function Shape({
 }
 
 function Shapes({ transition }) {
-  const { nodes } = useGLTF("/F-16D.gltf");
+  const { nodes } = useGLTF("/F16D.gltf");
   const textures = useTexture([
     "/ao.jpg",
     "/normal.jpg",
@@ -153,8 +153,13 @@ export default function App() {
   // Animated background color
   const props = useSpring({
     background:
-      location === "/" ? "#9d169f" : location === "/knot" ? "#2622cf" : "#ffdb14",
-    color: location === "/" ? "#f679c5" : location === "/knot" ? "white" : "white"
+      location === "/"
+        ? "#9d169f"
+        : location === "/knot"
+        ? "#2622cf"
+        : "#ffdb14",
+    color:
+      location === "/" ? "#f679c5" : location === "/knot" ? "white" : "white"
   });
   // Animated shape props
   const transition = useTransition(location, {

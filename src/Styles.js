@@ -60,7 +60,7 @@ function Nav(props) {
       <NavRight {...props}>
         <Link to="/">Torus</Link>
         <Link to="/knot">Knot</Link>
-        <Link to="/bomb">Video</Link>
+        <Link to="/video">Video</Link>
       </NavRight>
     </>
   );
