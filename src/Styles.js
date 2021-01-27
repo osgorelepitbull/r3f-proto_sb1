@@ -3,6 +3,7 @@ import { Link } from "wouter";
 import "styled-components/macro";
 import { a } from "@react-spring/web";
 import styled from "styled-components";
+import "./styles.css";
 
 const Container = styled(a.div)`
   pointer-events: none;
